@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>JS TODOアプリ</title>
+</head>
+<body>
+  <h1>TODOアプリ</h1>
+
+  <!-- タスク入力エリア -->
+  <div>
+    <input id="add-text" type="text" placeholder="タスクを入力" />
+    <button id="add-button">追加</button>
+  </div>
+
+  <!-- 未完了のタスク一覧エリア -->
+  <div>
+    <h2>未完了のタスク</h2>
+    <ul id="incomplete-list">
+      <!-- ここにJavaScriptで動的にli要素を追加していきます -->
+    </ul>
+  </div>
+
+  <!-- 完了したタスク一覧エリア -->
+  <div>
+    <h2>完了したタスク</h2>
+    <ul id="complete-list">
+      <!-- ここに完了したタスクが入ります -->
+    </ul>
+  </div>
+
+  <!-- JavaScriptファイルの読み込み -->
+  <script src="index.js"></script>
+</body>
+</html>
