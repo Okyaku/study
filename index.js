@@ -1,34 +1,51 @@
-// 1. HTMLの要素を取得する
 const addText = document.getElementById("add-text");
 const addButton = document.getElementById("add-button");
 const incompleteList = document.getElementById("incomplete-list");
+const completeList = document.getElementById("complete-list"); // 完了リストを取得
 
-// 2. 「追加」ボタンが押された時の処理
 const onClickAdd = () => {
-  // 入力欄のテキストを取得
   const inputText = addText.value;
-  if (inputText === "") return; // 空文字なら何もしない
-
-  // 入力欄をリセット
+  if (inputText === "") return;
   addText.value = "";
 
-  // 3. liタグを作成
   const li = document.createElement("li");
   li.innerText = inputText;
 
-  // 4. 「削除」ボタンを作成
+  // --- 【1. 完了ボタンの作成と起爆スイッチ】 ---
+  const completeButton = document.createElement("button");
+  completeButton.innerText = "完了";
+  completeButton.addEventListener("click", () => {
+    // 押された完了ボタンの親要素(li)を未完了リストから消す
+    const moveTarget = completeButton.parentNode;
+    incompleteList.removeChild(moveTarget);
+
+    // 完了リスト用に「戻す」ボタンを作り直して差し替える
+    completeButton.remove(); // 完了ボタン自体は消す
+    deleteButton.remove();   // 削除ボタンも消す
+
+    const backButton = document.createElement("button");
+    backButton.innerText = "戻す";
+    backButton.addEventListener("click", () => {
+      // 「戻す」が押されたら完了リストから消して未完了に戻す処理（後ほど実装）
+      completeList.removeChild(backButton.parentNode);
+    });
+
+    moveTarget.appendChild(backButton);
+    completeList.appendChild(moveTarget); // 完了リスト(ul)へ移動！
+  });
+
+  // --- 【2. 削除ボタンの作成と起爆スイッチ】 ---
   const deleteButton = document.createElement("button");
   deleteButton.innerText = "削除";
   deleteButton.addEventListener("click", () => {
-    // 押された削除ボタンの親要素（li）を未完了リストから削除する
     const deleteTarget = deleteButton.parentNode;
     incompleteList.removeChild(deleteTarget);
   });
 
-  // 5. liタグの中に削除ボタンを入れ、未完了リスト(ul)に追加する
+  // 未完了リストに追加
+  li.appendChild(completeButton);
   li.appendChild(deleteButton);
   incompleteList.appendChild(li);
 };
 
-// 6. 追加ボタンにクリックイベントを登録
 addButton.addEventListener("click", onClickAdd);
