@@ -1,50 +1,57 @@
 import { useState } from "react";
+import { InputTodo } from "./InputTodo";
+import { IncompleteTodos} from "./IncompleteTodos"
+import { CompleteTodos } from "./CompleteTodos"
 
 export const TodoApp = () => {
-  const [inputText,setinputText]=useState("");
-  const [IncompleteTodos,setIncompleteTodos]=useState([]);
-  const [completoTodos, setcompleteTodos]=useState([]);
-  
-  const onChangeInputText = (e) => setinputText(e.target.value);
+  const [inputText, setInputText] = useState("");
+  const [incompleteTodos, setIncompleteTodos] = useState([]);
+  const [completeTodos, setCompleteTodos] = useState([]);
+
+  const onChangeInputText = (e) => setInputText(e.target.value);
+
   const onClickAdd = () => {
     if (inputText === "") return;
-    setIncompleteTodos([...IncompleteTodos, inputText]);
-    setinputText("");
+    setIncompleteTodos([...incompleteTodos, inputText]);
+    setInputText("");
   };
-  const onClickDelete = (index) => {
-    const newTodos = [...IncompleteTodos];
-    newTodos.splice(index,1);
-    setIncompleteTodos(newTodos);
-  }
-  const onComplete = (index) => { 
-    const newIncompletetodos = [...IncompleteTodos];
-    const targettodo = newIncompletetodos.splice(index,1)[0];
-    const newcompletetodos = [...completoTodos, targettodo];
-    setIncompleteTodos(newIncompletetodos);
-    setcompleteTodos(newcompletetodos);
-  }
 
-    return(
-        <>
-        <input 
-        type="text"
-        placeholder="todoを入力"
-        value={inputText}
+  const onClickDelete = (index) => {
+    const newTodos = [...incompleteTodos];
+    newTodos.splice(index, 1);
+    setIncompleteTodos(newTodos);
+  };
+
+  const onClickComplete = (index) => {
+    const newIncompleteTodos = [...incompleteTodos];
+    const targetTodo = newIncompleteTodos.splice(index, 1)[0];
+    setIncompleteTodos(newIncompleteTodos);
+    setCompleteTodos([...completeTodos, targetTodo]);
+  };
+
+  const onClickBack = (index) => {
+    const newCompleteTodos = [...completeTodos];
+    const targetTodo = newCompleteTodos.splice(index, 1)[0];
+    setCompleteTodos(newCompleteTodos);
+    setIncompleteTodos([...incompleteTodos, targetTodo]);
+  };
+
+  return (
+    <div style={{ padding: "20px", maxWidth: "400px" }}>
+      <InputTodo
+        inputText={inputText}
         onChange={onChangeInputText}
-        />
-        <button onClick={onClickAdd}>追加</button>
-        <p>未完了のTODO</p>
-        <ul>
-          {/* 配列の .map を使ってJSXのリストを動的に出力！ */}
-          {IncompleteTodos.map((todo, index) => (
-            <li key={index}>
-              <span>{todo}</span>
-              <button onClick={() => onComplete}>完了</button>
-              <button onClick={() => onClickDelete}>削除</button>
-            </li>
-          ))}
-        </ul>
-        
-        </>
-    )
-}
+        onClick={onClickAdd}
+      />
+      <IncompleteTodos
+        todos={incompleteTodos}
+        onClickComplete={onClickComplete}
+        onClickDelete={onClickDelete}
+      />
+      <CompleteTodos
+        todos={completeTodos}
+        onClickBack={onClickBack}
+      />
+    </div>
+  );
+};
